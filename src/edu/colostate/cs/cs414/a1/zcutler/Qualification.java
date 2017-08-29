@@ -5,10 +5,14 @@ import java.util.HashSet;
 public class Qualification {
 	
 	private String description;
-	private HashSet<Worker> workers = new HashSet<Worker>();
-	private HashSet<Project> projects = new HashSet<Project>();
+	private HashSet<Worker> workers = new HashSet<>();
+	private HashSet<Project> projects = new HashSet<>();
 	
 	public Qualification(String description) {
+		if(description == null)
+			throw new NullPointerException("Can not have a null description.");
+		if(description.isEmpty())
+			throw new RuntimeException("Missing a description.");
 		this.description = description;
 	}
 
@@ -55,7 +59,10 @@ public class Qualification {
 			this.projects.add(project);
 			project.addQualification(this);
 		}
-			
+	}
+
+	public HashSet<Project> getProjects() {
+		return projects;
 	}
 	
 	public HashSet<Worker> getWorkers(){

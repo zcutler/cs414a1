@@ -7,15 +7,19 @@ public class Project {
 	private String name;
 	private ProjectSize projectSize; 
 	private ProjectStatus projectStatus;
-	private HashSet<Worker> workers = new HashSet<Worker>();
-	private HashSet<Qualification> qualifications = new HashSet<Qualification>();
-	
+	private HashSet<Worker> workers = new HashSet<>();
+	private HashSet<Qualification> qualifications = new HashSet<>();
+
 	public Project(String name, ProjectSize projectSize, ProjectStatus projectStatus) {
+		if(name == null)
+			throw new NullPointerException("Can not have a null Project name.");
+		if(name.isEmpty())
+			throw new RuntimeException("Missing a Project name.");
 		this.name = name;
 		this.projectSize = projectSize;
 		this.projectStatus = projectStatus;
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.name + ":" + String.valueOf(this.workers.size()) + ":" + this.projectStatus.name();
@@ -44,6 +48,10 @@ public class Project {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	public HashSet<Qualification> getQualifications() {
+		return qualifications;
 	}
 
 	public HashSet<Worker> getWorkers() {
