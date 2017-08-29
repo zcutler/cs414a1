@@ -1,29 +1,26 @@
 package edu.colostate.cs.cs414.a1.zcutler;
 
-//import static org.junit.Assert.*;
+// Eclipse Block ~~~~~~~~~~~
 
 import org.junit.Test;
 
 import java.util.HashSet;
 
-import static org.testng.AssertJUnit.*;
+import static org.junit.Assert.*;
+
+// END Eclipse Block ~~~~~~~~~~~
+
+// IntelliJ Block  ~~~~~~~~~~~~~~
+//import org.junit.Test;
+//
+//import java.util.HashSet;
+//
+//import static org.testng.AssertJUnit.*;
+
+// END IntelliJ Block  ~~~~~~~~~~~~~~
 
 public class QualificationTest {
 
-	private Worker getWorkerWithQualifications() {
-		Qualification x = new Qualification("x");
-		Qualification y = new Qualification("y");
-		Qualification z = new Qualification("z");
-
-		HashSet<Qualification> qualifications = new HashSet<>();
-		qualifications.add(x);
-		qualifications.add(y);
-		qualifications.add(z);
-
-		Worker lyle = new Worker("chippah", qualifications);
-
-		return lyle;
-	}
 
 	private Qualification getQualificationWithMultipleWorkers() {
 		Qualification x = new Qualification("x");
@@ -70,13 +67,13 @@ public class QualificationTest {
 
 	@Test
 	public void testAddToWorker() {
-		Worker lyle = this.getWorkerWithQualifications();
+		Worker lyle = Worker.getWorkerWithQualifications();
 		assertEquals(lyle.getQualifications().size(), 3);
 	}
 
 	@Test
 	public void testAddExistingQualificationToWorker() {
-		Worker lyle = this.getWorkerWithQualifications();
+		Worker lyle = Worker.getWorkerWithQualifications();
 		Qualification z = new Qualification("z");
 		lyle.addQualification(z);
 		assertEquals(lyle.getQualifications().size(), 3);

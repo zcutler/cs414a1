@@ -9,9 +9,16 @@ public class Worker {
 	private HashSet<Qualification> qualifications = new HashSet<Qualification>(); 
 	private HashSet<Project> projects = new HashSet<Project>(); 
 	private Company company;
-	static int workLoadThreshold = 12;
+	private static final int workLoadThreshold = 12;
+	private static final int baseSalary = 50000;
 
 	public Worker(String name, HashSet<Qualification> qualifications){
+		if(name == null)
+			throw new NullPointerException("Can not have a null Worker name.");
+		if(name.isEmpty())
+			throw new RuntimeException("Missing a Worker name.");
+		if(qualifications == null)
+			throw new NullPointerException("Can not have null qualifications.");
 		this.nickName = name;
 		for(Qualification qualification : qualifications)
 			this.addQualification(qualification);
@@ -140,7 +147,7 @@ public class Worker {
 			}
 		}
 		
-		if(Worker.workLoadValue(numberOfLargeProjects, numberOfMediumProjects, numberOfSmallProjects) > 12)
+		if(Worker.workLoadValue(numberOfLargeProjects, numberOfMediumProjects, numberOfSmallProjects) > workLoadThreshold)
 			result = true;
 		
 		return result;
@@ -148,6 +155,27 @@ public class Worker {
 	
 	static private int workLoadValue(int numberOfLargeProjects, int numberOfMediumProjects, int numberOfSmallProjects) {
 		return 3 * numberOfLargeProjects + 2 * numberOfMediumProjects + numberOfSmallProjects;
+	}
+
+	public void determineSalary() {
+		this.salary =  baseSalary * qualifications.size();
+	}
+
+	static public Worker getWorkerWithQualifications() {
+		Qualification x = new Qualification("x");
+		Qualification y = new Qualification("y");
+		Qualification z = new Qualification("z");
+
+		HashSet<Qualification> qualifications = new HashSet<>();
+		qualifications.add(x);
+		qualifications.add(y);
+		qualifications.add(z);
+
+		Worker lyle = new Worker("chippah", qualifications);
+
+		lyle.determineSalary();
+
+		return lyle;
 	}
 	
 	public static void main(String[] args) {
