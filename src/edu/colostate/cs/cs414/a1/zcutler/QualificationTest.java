@@ -1,23 +1,10 @@
 package edu.colostate.cs.cs414.a1.zcutler;
 
-// Eclipse Block ~~~~~~~~~~~
-
 import org.junit.Test;
 
 import java.util.HashSet;
 
 import static org.junit.Assert.*;
-
-// END Eclipse Block ~~~~~~~~~~~
-
-// IntelliJ Block  ~~~~~~~~~~~~~~
-//import org.junit.Test;
-//
-//import java.util.HashSet;
-//
-//import static org.testng.AssertJUnit.*;
-
-// END IntelliJ Block  ~~~~~~~~~~~~~~
 
 public class QualificationTest {
 
