@@ -11,7 +11,7 @@ public class WorkerTest {
 
 	@Test
 	public void testToString() {
-		Worker lyle = Worker.getWorkerWithQualifications();
+		Worker lyle = Worker.getWorkerWithQualifications("chippah");
 		Project dumboDrop = new Project("Dumbo Drop", ProjectSize.LARGE, ProjectStatus.SUSPENDED);
 		Project runway = new Project("Runway", ProjectSize.SMALL, ProjectStatus.PLANNED);
 		HashSet<Qualification> qualifications = lyle.getQualifications();
@@ -47,7 +47,7 @@ public class WorkerTest {
 
 	@Test
 	public void testSameQualification() {
-		Worker lyle = Worker.getWorkerWithQualifications();
+		Worker lyle = Worker.getWorkerWithQualifications("chippah");
 		Qualification x = new Qualification("x");
 		lyle.addQualification(x);
 		assertEquals(lyle.getQualifications().size(), 3);
@@ -55,7 +55,7 @@ public class WorkerTest {
 
 	@Test
 	public void testQualificationSymmetry() {
-		Worker lyle = Worker.getWorkerWithQualifications();
+		Worker lyle = Worker.getWorkerWithQualifications("chippah");
 		HashSet<Qualification> qualifications = lyle.getQualifications();
 		for(Qualification qualification : qualifications){
 			assertTrue(qualification.getWorkers().contains(lyle));
@@ -64,24 +64,21 @@ public class WorkerTest {
 
 	@Test
 	public void testEquals() {
-		Worker lyle = Worker.getWorkerWithQualifications();
-		Worker chip = Worker.getWorkerWithQualifications();
+		Worker lyle = Worker.getWorkerWithQualifications("chippah");
+		Worker chip = Worker.getWorkerWithQualifications("chippah");
 		assertEquals(lyle, chip);
 	}
 
 	@Test
 	public void testNotEquals() {
-		Worker lyle = Worker.getWorkerWithQualifications();
-		Qualification x = new Qualification("description");
-		HashSet<Qualification> qualifications = new HashSet<>();
-		qualifications.add(x);
-		Worker chip = new Worker("chip", qualifications);
+		Worker lyle = Worker.getWorkerWithQualifications("chippah");
+		Worker chip = Worker.getWorkerWithQualifications("chip");
 		assertNotEquals(lyle, chip);
 	}
 
 	@Test
 	public void testAddProject() {
-		Worker lyle = Worker.getWorkerWithQualifications();
+		Worker lyle = Worker.getWorkerWithQualifications("chippah");
 		Project runway = new Project("runway", ProjectSize.SMALL, ProjectStatus.SUSPENDED);
 		HashSet<Qualification> qualifications = lyle.getQualifications();
 		runway.addQualifications(qualifications);
@@ -91,7 +88,7 @@ public class WorkerTest {
 
 	@Test
 	public void testAddProjectTwice() {
-		Worker lyle = Worker.getWorkerWithQualifications();
+		Worker lyle = Worker.getWorkerWithQualifications("chippah");
 		Project runway = new Project("runway", ProjectSize.SMALL, ProjectStatus.SUSPENDED);
 		HashSet<Qualification> qualifications = lyle.getQualifications();
 		runway.addQualifications(qualifications);
@@ -102,7 +99,7 @@ public class WorkerTest {
 
 	@Test
 	public void testAddProjectSymmetry() {
-		Worker lyle = Worker.getWorkerWithQualifications();
+		Worker lyle = Worker.getWorkerWithQualifications("chippah");
 		Project runway = new Project("runway", ProjectSize.SMALL, ProjectStatus.SUSPENDED);
 		HashSet<Qualification> qualifications = lyle.getQualifications();
 		runway.addQualifications(qualifications);
@@ -112,7 +109,7 @@ public class WorkerTest {
 
 	@Test
 	public void testNotOverload() {
-		Worker lyle = Worker.getWorkerWithQualifications();
+		Worker lyle = Worker.getWorkerWithQualifications("chippah");
 		Project runway = new Project("runway", ProjectSize.SMALL, ProjectStatus.SUSPENDED);
 		HashSet<Qualification> qualifications = lyle.getQualifications();
 		runway.addQualifications(qualifications);
@@ -121,7 +118,7 @@ public class WorkerTest {
 
 	@Test
 	public void testWillOverload() {
-		Worker lyle = Worker.getWorkerWithQualificationsAndProjects();
+		Worker lyle = Worker.getWorkerWithQualificationsAndProjects("chippah");
 		HashSet<Qualification> qualifications = lyle.getQualifications();
 
 		Project dumboDrop = new Project("dumbo drop", ProjectSize.SMALL, ProjectStatus.SUSPENDED);
@@ -131,7 +128,7 @@ public class WorkerTest {
 
 	@Test
 	public void testAddProjectFailOverload() {
-		Worker lyle = Worker.getWorkerWithQualificationsAndProjects();
+		Worker lyle = Worker.getWorkerWithQualificationsAndProjects("chippah");
 		HashSet<Qualification> qualifications = lyle.getQualifications();
 
 		Project dumboDrop = new Project("dumbo drop", ProjectSize.SMALL, ProjectStatus.SUSPENDED);
@@ -147,7 +144,7 @@ public class WorkerTest {
 
 	@Test
 	public void testRemoveProject() {
-		Worker lyle = Worker.getWorkerWithQualificationsAndProjects();
+		Worker lyle = Worker.getWorkerWithQualificationsAndProjects("chippah");
 		Project runway = new Project("runway", ProjectSize.LARGE, ProjectStatus.ACTIVE);
 		lyle.removeProjects(runway);
 		assertFalse(lyle.getProjects().contains(runway));
@@ -155,7 +152,7 @@ public class WorkerTest {
 
 	@Test
 	public void testRemoveProjectSymmetry() {
-		Worker lyle = Worker.getWorkerWithQualifications();
+		Worker lyle = Worker.getWorkerWithQualifications("chippah");
 		Project runway = new Project("runway", ProjectSize.LARGE, ProjectStatus.SUSPENDED);
 		HashSet<Qualification> qualifications = lyle.getQualifications();
 		runway.addQualifications(qualifications);

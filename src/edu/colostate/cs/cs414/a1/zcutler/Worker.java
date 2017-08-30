@@ -166,7 +166,7 @@ public class Worker {
 		this.salary =  baseSalary * qualifications.size();
 	}
 
-	static public Worker getWorkerWithQualifications() {
+	static public Worker getWorkerWithQualifications(String name) {
 		Qualification x = new Qualification("x");
 		Qualification y = new Qualification("y");
 		Qualification z = new Qualification("z");
@@ -176,15 +176,15 @@ public class Worker {
 		qualifications.add(y);
 		qualifications.add(z);
 
-		Worker lyle = new Worker("chippah", qualifications);
+		Worker lyle = new Worker(name, qualifications);
 
 		lyle.determineSalary();
 
 		return lyle;
 	}
 
-	static public Worker getWorkerWithQualificationsAndProjects() {
-		Worker lyle = Worker.getWorkerWithQualifications();
+	static public Worker getWorkerWithQualificationsAndProjects(String name) {
+		Worker lyle = Worker.getWorkerWithQualifications(name);
 		Project runway = new Project("runway", ProjectSize.LARGE, ProjectStatus.SUSPENDED);
 		Project runway2 = new Project("runway2", ProjectSize.LARGE, ProjectStatus.SUSPENDED);
 		Project runway3 = new Project("runway3", ProjectSize.LARGE, ProjectStatus.SUSPENDED);

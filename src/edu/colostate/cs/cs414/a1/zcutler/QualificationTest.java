@@ -54,13 +54,13 @@ public class QualificationTest {
 
 	@Test
 	public void testAddToWorker() {
-		Worker lyle = Worker.getWorkerWithQualifications();
+		Worker lyle = Worker.getWorkerWithQualifications("chippah");
 		assertEquals(lyle.getQualifications().size(), 3);
 	}
 
 	@Test
 	public void testAddExistingQualificationToWorker() {
-		Worker lyle = Worker.getWorkerWithQualifications();
+		Worker lyle = Worker.getWorkerWithQualifications("chippah");
 		Qualification z = new Qualification("z");
 		lyle.addQualification(z);
 		assertEquals(lyle.getQualifications().size(), 3);

@@ -71,6 +71,12 @@ public class Project {
 	}
 
 	public void setStatus(ProjectStatus projectStatus) {
+
+		if(projectStatus == ProjectStatus.ACTIVE){
+			if(this.missingQualifications().size() > 0)
+				throw new RuntimeException(this.name + " still has missing qualifications.");
+		}
+
 		this.projectStatus = projectStatus;
 	}
 	
@@ -139,7 +145,7 @@ public class Project {
 			}
 		}
 		
-		for(Qualification qualification : missingQualifications) {
+		for(Qualification qualification : this.qualifications) {
 			if(presentQualifications.contains(qualification)) {
 				missingQualifications.remove(qualification);
 			}
@@ -161,6 +167,13 @@ public class Project {
 		}
 		
 		return result;
+	}
+
+	static Project getProjectWithWorker(String name, Worker worker){
+		Project dumboDrop = new Project(name, ProjectSize.LARGE, ProjectStatus.SUSPENDED);
+		dumboDrop.addQualifications(worker.getQualifications());
+		dumboDrop.addWorker(worker);
+		return dumboDrop;
 	}
 
 	public static void main(String[] args) {
