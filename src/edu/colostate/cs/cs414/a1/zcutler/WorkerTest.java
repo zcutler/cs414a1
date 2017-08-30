@@ -45,6 +45,122 @@ public class WorkerTest {
 		}
 	}
 
+	@Test
+	public void testSameQualification() {
+		Worker lyle = Worker.getWorkerWithQualifications();
+		Qualification x = new Qualification("x");
+		lyle.addQualification(x);
+		assertEquals(lyle.getQualifications().size(), 3);
+	}
 
+	@Test
+	public void testQualificationSymmetry() {
+		Worker lyle = Worker.getWorkerWithQualifications();
+		HashSet<Qualification> qualifications = lyle.getQualifications();
+		for(Qualification qualification : qualifications){
+			assertTrue(qualification.getWorkers().contains(lyle));
+		}
+	}
 
+	@Test
+	public void testEquals() {
+		Worker lyle = Worker.getWorkerWithQualifications();
+		Worker chip = Worker.getWorkerWithQualifications();
+		assertEquals(lyle, chip);
+	}
+
+	@Test
+	public void testNotEquals() {
+		Worker lyle = Worker.getWorkerWithQualifications();
+		Qualification x = new Qualification("description");
+		HashSet<Qualification> qualifications = new HashSet<>();
+		qualifications.add(x);
+		Worker chip = new Worker("chip", qualifications);
+		assertNotEquals(lyle, chip);
+	}
+
+	@Test
+	public void testAddProject() {
+		Worker lyle = Worker.getWorkerWithQualifications();
+		Project runway = new Project("runway", ProjectSize.SMALL, ProjectStatus.SUSPENDED);
+		HashSet<Qualification> qualifications = lyle.getQualifications();
+		runway.addQualifications(qualifications);
+		lyle.addProjects(runway);
+		assertTrue(lyle.getProjects().contains(runway));
+	}
+
+	@Test
+	public void testAddProjectTwice() {
+		Worker lyle = Worker.getWorkerWithQualifications();
+		Project runway = new Project("runway", ProjectSize.SMALL, ProjectStatus.SUSPENDED);
+		HashSet<Qualification> qualifications = lyle.getQualifications();
+		runway.addQualifications(qualifications);
+		lyle.addProjects(runway);
+		lyle.addProjects(runway);
+		assertEquals(lyle.getProjects().size(), 1);
+	}
+
+	@Test
+	public void testAddProjectSymmetry() {
+		Worker lyle = Worker.getWorkerWithQualifications();
+		Project runway = new Project("runway", ProjectSize.SMALL, ProjectStatus.SUSPENDED);
+		HashSet<Qualification> qualifications = lyle.getQualifications();
+		runway.addQualifications(qualifications);
+		lyle.addProjects(runway);
+		assertTrue(runway.getWorkers().contains(lyle));
+	}
+
+	@Test
+	public void testNotOverload() {
+		Worker lyle = Worker.getWorkerWithQualifications();
+		Project runway = new Project("runway", ProjectSize.SMALL, ProjectStatus.SUSPENDED);
+		HashSet<Qualification> qualifications = lyle.getQualifications();
+		runway.addQualifications(qualifications);
+		assertFalse(lyle.willOverload(runway));
+	}
+
+	@Test
+	public void testWillOverload() {
+		Worker lyle = Worker.getWorkerWithQualificationsAndProjects();
+		HashSet<Qualification> qualifications = lyle.getQualifications();
+
+		Project dumboDrop = new Project("dumbo drop", ProjectSize.SMALL, ProjectStatus.SUSPENDED);
+		dumboDrop.addQualifications(qualifications);
+		assertTrue(lyle.willOverload(dumboDrop));
+	}
+
+	@Test
+	public void testAddProjectFailOverload() {
+		Worker lyle = Worker.getWorkerWithQualificationsAndProjects();
+		HashSet<Qualification> qualifications = lyle.getQualifications();
+
+		Project dumboDrop = new Project("dumbo drop", ProjectSize.SMALL, ProjectStatus.SUSPENDED);
+		dumboDrop.addQualifications(qualifications);
+
+		try {
+			lyle.addProjects(dumboDrop);
+			fail("Expected a RuntimeException to be thrown");
+		}catch (RuntimeException e){
+			assertEquals(e.getMessage(), "dumbo drop will overload chippah.");
+		}
+	}
+
+	@Test
+	public void testRemoveProject() {
+		Worker lyle = Worker.getWorkerWithQualificationsAndProjects();
+		Project runway = new Project("runway", ProjectSize.LARGE, ProjectStatus.ACTIVE);
+		lyle.removeProjects(runway);
+		assertFalse(lyle.getProjects().contains(runway));
+	}
+
+	@Test
+	public void testRemoveProjectSymmetry() {
+		Worker lyle = Worker.getWorkerWithQualifications();
+		Project runway = new Project("runway", ProjectSize.LARGE, ProjectStatus.SUSPENDED);
+		HashSet<Qualification> qualifications = lyle.getQualifications();
+		runway.addQualifications(qualifications);
+		lyle.addProjects(runway);
+		lyle.removeProjects(runway);
+		assertFalse(runway.getWorkers().contains(lyle));
+	}
 }

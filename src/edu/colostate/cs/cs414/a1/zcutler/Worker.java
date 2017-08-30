@@ -108,23 +108,8 @@ public class Worker {
 			this.projects.remove(project);
 			project.removeWorker(this);
 		}
-			
 	}
-	
-	static private void determineProjectSize(Project project, int numberOfLargeProjects, int numberOfMediumProjects, int numberOfSmallProjects) {
-		switch(project.getSize()) {
-		case LARGE:
-			numberOfLargeProjects++;
-			break;
-		case MEDIUM:
-			numberOfMediumProjects++;
-			break;
-		case SMALL:
-			numberOfSmallProjects++;
-			break;
-	}	
-	}
-	
+
 	public boolean willOverload(Project project) {
 		boolean result = false;
 
@@ -133,8 +118,18 @@ public class Worker {
 		if(project.getSize() == null) {
 			throw new RuntimeException(project.getName() + " does not have a size.");
 		}
-		
-		Worker.determineProjectSize(project, numberOfLargeProjects, numberOfMediumProjects, numberOfSmallProjects);
+
+		switch(project.getSize()) {
+			case LARGE:
+				numberOfLargeProjects++;
+				break;
+			case MEDIUM:
+				numberOfMediumProjects++;
+				break;
+			case SMALL:
+				numberOfSmallProjects++;
+				break;
+		}
 		
 		for(Project currentProject : this.projects) {
 			if(currentProject.getStatus() == ProjectStatus.ACTIVE) {
@@ -142,8 +137,18 @@ public class Worker {
 				if(currentProject.getSize() == null) {
 					throw new RuntimeException(currentProject.getName() + " does not have a size.");
 				}
-				
-				Worker.determineProjectSize(currentProject, numberOfLargeProjects, numberOfMediumProjects, numberOfSmallProjects);
+
+				switch(currentProject.getSize()) {
+					case LARGE:
+						numberOfLargeProjects++;
+						break;
+					case MEDIUM:
+						numberOfMediumProjects++;
+						break;
+					case SMALL:
+						numberOfSmallProjects++;
+						break;
+				}
 			}
 		}
 		
@@ -174,6 +179,29 @@ public class Worker {
 		Worker lyle = new Worker("chippah", qualifications);
 
 		lyle.determineSalary();
+
+		return lyle;
+	}
+
+	static public Worker getWorkerWithQualificationsAndProjects() {
+		Worker lyle = Worker.getWorkerWithQualifications();
+		Project runway = new Project("runway", ProjectSize.LARGE, ProjectStatus.SUSPENDED);
+		Project runway2 = new Project("runway2", ProjectSize.LARGE, ProjectStatus.SUSPENDED);
+		Project runway3 = new Project("runway3", ProjectSize.LARGE, ProjectStatus.SUSPENDED);
+		Project runway4 = new Project("runway4", ProjectSize.LARGE, ProjectStatus.SUSPENDED);
+		HashSet<Qualification> qualifications = lyle.getQualifications();
+		runway.addQualifications(qualifications);
+		runway2.addQualifications(qualifications);
+		runway3.addQualifications(qualifications);
+		runway4.addQualifications(qualifications);
+		lyle.addProjects(runway);
+		lyle.addProjects(runway2);
+		lyle.addProjects(runway3);
+		lyle.addProjects(runway4);
+
+		for(Project projects : lyle.getProjects()){
+			projects.setStatus(ProjectStatus.ACTIVE);
+		}
 
 		return lyle;
 	}
