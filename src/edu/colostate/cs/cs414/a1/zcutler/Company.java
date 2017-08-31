@@ -6,13 +6,17 @@ import java.util.Random;
 public class Company {
 	
 	private String name;
-	private HashSet<Worker> assignedWorkers = new HashSet<Worker>();
-	private HashSet<Worker> unassignedWorkers = new HashSet<Worker>();
-	private HashSet<Worker> availableWorkers = new HashSet<Worker>();
-	private HashSet<Project> projects = new HashSet<Project>();
+	private HashSet<Worker> assignedWorkers = new HashSet<>();
+	private HashSet<Worker> unassignedWorkers = new HashSet<>();
+	private HashSet<Worker> availableWorkers = new HashSet<>();
+	private HashSet<Project> projects = new HashSet<>();
 	
 	public Company(String companyName){
-		name = companyName;
+		if(companyName == null)
+			throw new NullPointerException("Can not have a null Company name.");
+		if(companyName.isEmpty())
+			throw new RuntimeException("Missing a Company name.");
+		this.name = companyName;
 	}
 	
 	public HashSet<Worker> getAssignedWorkers() {
@@ -30,6 +34,10 @@ public class Company {
 	public HashSet<Worker> getAvailableWorkers(){
 		return this.availableWorkers;
 	}
+
+	public HashSet<Project> getProjects() {
+		return projects;
+	}
 	
 	private int determineSalary(Worker worker) {
 		Random rand = new Random();
@@ -39,12 +47,12 @@ public class Company {
 		return salary;
 	}
 	
-	private Worker GetWorker(Worker worker) {
+	private Worker getWorker(Worker worker) {
 		
 		if(!this.availableWorkers.contains(worker))
 			throw new RuntimeException(worker.getName() + " is not an available worker.");
 		
-		for(Worker w : this.assignedWorkers) {
+		for(Worker w : this.availableWorkers) {
 			if(w.equals(worker)) {
 				return w;
 			}
@@ -52,7 +60,7 @@ public class Company {
 		return null;
 	}
 	
-	private Project GetProject(Project project) {
+	public Project getProject(Project project) {
 		
 		if(!this.projects.contains(project))
 			throw new RuntimeException(project.getName() + " is not a know project.");
@@ -83,9 +91,9 @@ public class Company {
 		if(!this.projects.contains(project))
 			this.projects.add(project);
 		
-		Project currentProject = this.GetProject(project);
+		Project currentProject = this.getProject(project);
 		
-		Worker currentWorker = this.GetWorker(worker);
+		Worker currentWorker = this.getWorker(worker);
 			
 		currentProject.addWorker(currentWorker);
 		
@@ -99,9 +107,9 @@ public class Company {
 	
 	public void unassign(Worker worker, Project project) {
 		
-		Project currentProject = this.GetProject(project);
+		Project currentProject = this.getProject(project);
 		
-		Worker currentWorker = this.GetWorker(worker);
+		Worker currentWorker = this.getWorker(worker);
 		
 		if(!this.assignedWorkers.contains(currentWorker)) 
 			throw new RuntimeException(currentWorker.getName() + " is not an assigned worker.");
@@ -122,7 +130,7 @@ public class Company {
 		if(!this.assignedWorkers.contains(worker)) 
 			return;
 		
-		Worker currentWorker = this.GetWorker(worker);
+		Worker currentWorker = this.getWorker(worker);
 		
 		for(Project project : currentWorker.getProjects()) {
 			this.unassign(currentWorker, project);
@@ -143,7 +151,7 @@ public class Company {
 	}
 	
 	public void start(Project project) {
-		Project currentProject = this.GetProject(project);
+		Project currentProject = this.getProject(project);
 		
 		if(currentProject.getStatus() == ProjectStatus.ACTIVE)
 			return;
@@ -156,7 +164,7 @@ public class Company {
 	}
 	
 	public void finish(Project project) {		
-		Project currentProject = this.GetProject(project);
+		Project currentProject = this.getProject(project);
 		
 		for(Worker worker : currentProject.getWorkers()) {
 			this.unassign(worker, currentProject);

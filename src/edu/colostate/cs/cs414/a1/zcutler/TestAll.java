@@ -7,7 +7,7 @@ import junit.framework.JUnit4TestAdapter;
 
 // This section declares all of the test classes in the program.
 @RunWith (Suite.class)
-@Suite.SuiteClasses ({ WorkerTest.class, ProjectTest.class, QualificationTest.class }) // Add test classes here.
+@Suite.SuiteClasses ({ CompanyTest.class, WorkerTest.class, ProjectTest.class, QualificationTest.class }) // Add test classes here.
 
 public class TestAll {
 // Execution begins in main(). This test class executes a
