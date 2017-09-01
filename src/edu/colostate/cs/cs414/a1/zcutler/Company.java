@@ -88,6 +88,10 @@ public class Company {
 	}
 	
 	public void assign(Worker worker, Project project) {
+
+	    if(worker == null || project == null)
+	        throw new NullPointerException("Can not have null workers or projects.");
+
 		if(!this.projects.contains(project))
 			this.projects.add(project);
 		
@@ -106,13 +110,16 @@ public class Company {
 	}
 	
 	public void unassign(Worker worker, Project project) {
+
+        if(worker == null || project == null)
+            throw new NullPointerException("Can not have null workers or projects.");
 		
 		Project currentProject = this.getProject(project);
 		
 		Worker currentWorker = this.getWorker(worker);
 		
 		if(!this.assignedWorkers.contains(currentWorker)) 
-			throw new RuntimeException(currentWorker.getName() + " is not an assigned worker.");
+		    return;
 				
 		currentProject.removeWorker(currentWorker);
 				
@@ -127,6 +134,10 @@ public class Company {
 	}
 	
 	public void unassignAll(Worker worker) {
+
+        if(worker == null)
+            throw new NullPointerException("Can not have a null worker.");
+
 		if(!this.assignedWorkers.contains(worker)) 
 			return;
 		
@@ -202,6 +213,7 @@ public class Company {
 			return false;
 		return true;
 	}
+
 
 	public static void main(String[] args) {
 		

@@ -89,7 +89,10 @@ public class Project {
 		
 		if(!this.isHelpful(worker))
 			throw new RuntimeException(worker.getName() + " will not be helpful on project " + this.name + ".");
-		
+
+		if(worker.willOverload(this))
+			throw new RuntimeException(worker.getName() + " will be overloaded if assigned to project " + this.name + ".");
+
 		this.workers.add(worker);
 		
 		worker.addProjects(this);
