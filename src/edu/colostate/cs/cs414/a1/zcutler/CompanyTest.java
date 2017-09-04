@@ -17,7 +17,7 @@ public class CompanyTest {
             Company z = new Company(null);
             fail("Expected a NullPointerException to be thrown");
         }catch (NullPointerException e){
-            assertEquals(e.getMessage(), "Can not have a null Company name.");
+            assertEquals("Can not have a null Company name.", e.getMessage());
         }
     }
 
@@ -27,7 +27,7 @@ public class CompanyTest {
             Company z = new Company("");
             fail("Expected a RuntimeException to be thrown");
         }catch (RuntimeException e){
-            assertEquals(e.getMessage(), "Missing a Company name.");
+            assertEquals("Missing a Company name.", e.getMessage());
         }
     }
 
@@ -38,7 +38,6 @@ public class CompanyTest {
         Worker chip = Worker.getWorkerWithQualifications("chip");
         z.addToAvailableWorkerPool(lyle);
         z.addToAvailableWorkerPool(chip);
-
         assertTrue(z.getAvailableWorkers().contains(lyle));
         assertTrue(z.getAvailableWorkers().contains(chip));
     }
@@ -46,7 +45,7 @@ public class CompanyTest {
     @Test
     public void testGetAvailableWorkersEmpty() {
         Company z = new Company("z");
-        assertEquals(z.getAvailableWorkers().size(), 0);
+        assertEquals(0, z.getAvailableWorkers().size());
     }
 
     @Test
@@ -56,7 +55,6 @@ public class CompanyTest {
         Worker chip = Worker.getWorkerWithQualifications("chip");
         z.addToAvailableWorkerPool(lyle);
         z.addToAvailableWorkerPool(chip);
-
         assertTrue(z.getUnassignedWorkers().contains(lyle));
         assertTrue(z.getUnassignedWorkers().contains(chip));
     }
@@ -70,7 +68,7 @@ public class CompanyTest {
         z.addToAvailableWorkerPool(chip);
 
         for(Worker worker : z.getAvailableWorkers()){
-            assertEquals(worker.getCompany(), z);
+            assertEquals(z, worker.getCompany());
         }
     }
 
@@ -78,14 +76,14 @@ public class CompanyTest {
     public void testEquals() {
         Company z = new Company("z");
         Company y = new Company("z");
-        assertEquals(z,y);
+        assertEquals(z, y);
     }
 
     @Test
     public void testNotEquals() {
         Company z = new Company("z");
         Company y = new Company("y");
-        assertNotEquals(z,y);
+        assertNotEquals(z, y);
     }
 
     @Test
@@ -101,7 +99,7 @@ public class CompanyTest {
         dumboDrop.addQualification(magic);
         dumboDrop.addWorker(chip);
         z.createProject("dumbo drop", dumboDrop.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
-        assertEquals(z.toString(), "z:2:1");
+        assertEquals("z:2:1", z.toString());
     }
 
     @Test
@@ -109,10 +107,9 @@ public class CompanyTest {
         Company z = new Company("z");
         Worker lyle = Worker.getWorkerWithQualifications("chippah");
         z.addToAvailableWorkerPool(lyle);
-        Project dumboDrop = Project.getProjectWithWorker("dumbo drop", lyle);
+        Project dumboDrop = z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
         Qualification magic = new Qualification("casting spells");
         dumboDrop.addQualification(magic);
-        z.createProject("dumbo drop", dumboDrop.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
         z.assign(lyle, dumboDrop);
         assertFalse(z.getUnassignedWorkers().contains(lyle));
     }
@@ -123,7 +120,7 @@ public class CompanyTest {
         Worker lyle = Worker.getWorkerWithQualifications("chippah");
         z.addToAvailableWorkerPool(lyle);
         z.addToAvailableWorkerPool(lyle);
-        assertEquals(z.getAvailableWorkers().size(), 1);
+        assertEquals(1, z.getAvailableWorkers().size());
     }
 
     @Test
@@ -133,11 +130,10 @@ public class CompanyTest {
         Worker chip = Worker.getWorkerWithQualifications("chip");
         z.addToAvailableWorkerPool(lyle);
         z.addToAvailableWorkerPool(chip);
-        Project dumboDrop = Project.getProjectWithWorker("dumbo drop", lyle);
+        Project dumboDrop = z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
         Qualification magic = new Qualification("casting spells");
         chip.addQualification(magic);
         dumboDrop.addQualification(magic);
-        z.createProject("dumbo drop", dumboDrop.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
         z.assign(lyle, dumboDrop);
         z.assign(chip, dumboDrop);
         assertTrue(z.getAssignedWorkers().contains(lyle));
@@ -150,17 +146,16 @@ public class CompanyTest {
         Worker lyle = Worker.getWorkerWithQualifications("chippah");
         Worker chip = Worker.getWorkerWithQualifications("chip");
         z.addToAvailableWorkerPool(lyle);
-        Project dumboDrop = Project.getProjectWithWorker("dumbo drop", lyle);
+        Project dumboDrop = z.createProject("dumbo drop", chip.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
         Qualification magic = new Qualification("casting spells");
         chip.addQualification(magic);
         dumboDrop.addQualification(magic);
-        z.createProject("dumbo drop", dumboDrop.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
         z.assign(lyle, dumboDrop);
         try {
             z.assign(chip, dumboDrop);
             fail("Expected a RuntimeException to be thrown");
         }catch (RuntimeException e){
-            assertEquals(e.getMessage(), "chip is not an available worker.");
+            assertEquals("chip is not an available worker.", e.getMessage());
         }
     }
 
@@ -392,5 +387,322 @@ public class CompanyTest {
         assertSame(z.getProject(dumboDrop).getStatus(), ProjectStatus.SUSPENDED);
     }
 
+    @Test
+    public void testUnassignAllFialNullWorker() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project dumboDrop =  new Project("dumbo drop", ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.assign(lyle, dumboDrop);
+        z.start(dumboDrop);
+        try {
+            z.unassignAll(null);
+            fail("Expected a NullPointerException to be thrown");
+        }catch (NullPointerException e){
+            String message = "Can not have a null worker.";
+            assertEquals(e.getMessage(), message);
+        };
+    }
+
+    @Test
+    public void testUnassignAllMultipleProjectsNotAssigned() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project dumboDrop =  new Project("dumbo drop", ProjectSize.LARGE, ProjectStatus.PLANNED);
+        Project dumboDrop2 =  new Project("dumbo drop2", ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.createProject("dumbo drop2", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.assign(lyle, dumboDrop);
+        z.assign(lyle, dumboDrop2);
+        z.start(dumboDrop);
+        z.start(dumboDrop2);
+        z.unassignAll(lyle);
+        assertFalse(z.getAssignedWorkers().contains(lyle));
+    }
+
+    @Test
+    public void testUnassignAllProjectNoLongerActive() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project dumboDrop =  new Project("dumbo drop", ProjectSize.LARGE, ProjectStatus.PLANNED);
+        Project dumboDrop2 =  new Project("dumbo drop2", ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.createProject("dumbo drop2", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.assign(lyle, dumboDrop);
+        z.assign(lyle, dumboDrop2);
+        z.start(dumboDrop);
+        z.start(dumboDrop2);
+        for(Project project : z.getProjects())
+            assertEquals(project.getStatus(), ProjectStatus.ACTIVE);
+        z.unassignAll(lyle);
+        for(Project project : z.getProjects())
+            assertEquals(project.getStatus(), ProjectStatus.SUSPENDED);
+    }
+
+    @Test
+    public void testUnassignAllFailWorkerNotAssigned() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project dumboDrop =  new Project("dumbo drop", ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        assertFalse(z.getAssignedWorkers().contains(lyle));
+        z.unassignAll(lyle);
+        assertFalse(z.getAssignedWorkers().contains(lyle));
+    }
+
+    @Test
+    public void testUnassignAllWorkerNowUnassigned() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project dumboDrop =  new Project("dumbo drop", ProjectSize.LARGE, ProjectStatus.PLANNED);
+        Project dumboDrop2 =  new Project("dumbo drop2", ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.createProject("dumbo drop2", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.assign(lyle, dumboDrop);
+        z.assign(lyle, dumboDrop2);
+        z.start(dumboDrop);
+        z.start(dumboDrop2);
+        assertFalse(z.getUnassignedWorkers().contains(lyle));
+        z.unassignAll(lyle);
+        assertTrue(z.getUnassignedWorkers().contains(lyle));
+    }
+
+    @Test
+    public void testStartFailNullProject() {
+        Company z = new Company("z");
+        try {
+            z.start(null);
+            fail("Expected a NullPointerException to be thrown");
+        }catch (NullPointerException e){
+            String message = "Can not have a null project.";
+            assertEquals(e.getMessage(), message);
+        }
+    }
+
+    @Test
+    public void testStartFailUnknownProject() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project unknown =  new Project("unknown", ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        try {
+            z.start(unknown);
+            fail("Expected a RuntimeException to be thrown");
+        }catch (RuntimeException e){
+            String message = "unknown is not a know project.";
+            assertEquals(e.getMessage(), message);
+        }
+    }
+
+    @Test
+    public void testStartCorrectProjectStatus() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project dumboDrop =  new Project("dumbo drop", ProjectSize.LARGE, ProjectStatus.PLANNED);
+        Project dumboDrop2 =  new Project("dumbo drop2", ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.createProject("dumbo drop2", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.assign(lyle, dumboDrop);
+        z.assign(lyle, dumboDrop2);
+        for(Project project : z.getProjects())
+            assertEquals(project.getStatus(), ProjectStatus.PLANNED);
+        z.start(dumboDrop);
+        z.start(dumboDrop2);
+        for(Project project : z.getProjects())
+            assertEquals(project.getStatus(), ProjectStatus.ACTIVE);
+    }
+
+    @Test
+    public void testStartFailMissingQualifications() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project dumboDrop =  new Project("dumbo drop", ProjectSize.LARGE, ProjectStatus.PLANNED);
+        HashSet<Qualification> qualifications = new HashSet<>(lyle.getQualifications());
+        Qualification magic = new Qualification("magic stuff");
+        qualifications.add(magic);
+        z.createProject("dumbo drop", qualifications, ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.assign(lyle, dumboDrop);
+        try {
+            z.start(dumboDrop);
+            fail("Expected a RuntimeException to be thrown");
+        }catch (RuntimeException e){
+            String message = "dumbo drop does not have all qualifications satisfied.";
+            assertEquals(e.getMessage(), message);
+        }
+    }
+
+    @Test
+    public void testStartFailMissingQualificationsCorrectStatus() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project dumboDrop =  new Project("dumbo drop", ProjectSize.LARGE, ProjectStatus.PLANNED);
+        HashSet<Qualification> qualifications = new HashSet<>(lyle.getQualifications());
+        Qualification magic = new Qualification("magic stuff");
+        qualifications.add(magic);
+        z.createProject("dumbo drop", qualifications, ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.assign(lyle, dumboDrop);
+        try {
+            z.start(dumboDrop);
+            fail("Expected a RuntimeException to be thrown");
+        }catch (RuntimeException e){
+            assertEquals(z.getProject(dumboDrop).getStatus(), ProjectStatus.PLANNED);
+        }
+    }
+
+    @Test
+    public void testFinishFailNullProject() {
+        Company z = new Company("z");
+        try {
+            z.finish(null);
+            fail("Expected a NullPointerException to be thrown");
+        }catch (NullPointerException e){
+            String message = "Can not have a null project.";
+            assertEquals(e.getMessage(), message);
+        }
+    }
+
+    @Test
+    public void testFinishFailUnknownProject() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project unknown =  new Project("unknown", ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        try {
+            z.finish(unknown);
+            fail("Expected a RuntimeException to be thrown");
+        }catch (RuntimeException e){
+            String message = "unknown is not a know project.";
+            assertEquals(e.getMessage(), message);
+        }
+    }
+
+    @Test
+    public void testFinishFailNotActive() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project dumboDrop =  new Project("dumbo drop", ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        try {
+            z.finish(dumboDrop);
+            fail("Expected a RuntimeException to be thrown");
+        }catch (RuntimeException e){
+            String message = "dumbo drop is not in an ACTIVE state. Only ACTIVE projects can be marked as finished.";
+            assertEquals(e.getMessage(), message);
+        }
+    }
+
+    @Test
+    public void testFinishCorrectProjectStatus() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project dumboDrop =  new Project("dumbo drop", ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.assign(lyle, dumboDrop);
+        z.start(dumboDrop);
+        z.finish(dumboDrop);
+        assertEquals(z.getProject(dumboDrop).getStatus(), ProjectStatus.FINISHED);
+    }
+
+    @Test
+    public void testFinishWorkerNoLongerAssigned() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project dumboDrop = z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.assign(lyle, dumboDrop);
+        z.start(dumboDrop);
+        assertTrue(z.getAssignedWorkers().contains(lyle));
+        z.finish(dumboDrop);
+        assertFalse(z.getAssignedWorkers().contains(lyle));
+    }
+
+    @Test
+    public void testFinishWorkerStillAssigned() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project dumboDrop = z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        Project dumboDrop2 = z.createProject("dumbo drop2", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.assign(lyle, dumboDrop);
+        z.assign(lyle, dumboDrop2);
+        z.start(dumboDrop);
+        z.start(dumboDrop2);
+        assertTrue(z.getAssignedWorkers().contains(lyle));
+        z.finish(dumboDrop);
+        assertTrue(z.getAssignedWorkers().contains(lyle));
+    }
+
+    @Test
+    public void testFinishWorkerNoLongerInProject() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project dumboDrop = z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.assign(lyle, dumboDrop);
+        z.start(dumboDrop);
+        assertTrue(z.getProject(dumboDrop).getWorkers().contains(lyle));
+        z.finish(dumboDrop);
+        assertFalse(z.getProject(dumboDrop).getWorkers().contains(lyle));
+    }
+
+    @Test
+    public void testCreateProjectFailNull() {
+        Company z = new Company("z");
+        try {
+            z.createProject(null, null, null, null);
+            fail("Expected a NullPointerException to be thrown");
+        }catch (NullPointerException e){
+            String message = "Can not have null qualifications.";
+            assertEquals(e.getMessage(), message);
+        }
+    }
+
+    @Test
+    public void testCreateProjectSuccess() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project dumboDrop = z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        Project dumboDrop2 = z.createProject("dumbo drop2", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        assertTrue(z.getProjects().contains(dumboDrop));
+        assertTrue(z.getProjects().contains(dumboDrop2));
+    }
+
+    @Test
+    public void testCreateProjectFailAlreadyExists() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        try {
+            z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.SMALL, ProjectStatus.PLANNED);
+            fail("Expected a RuntimeException to be thrown");
+        }catch (RuntimeException e){
+            String message = "dumbo drop is already a known project.";
+            assertEquals(e.getMessage(), message);
+        }
+    }
+
+    @Test
+    public void testCreateProjectCorrectStatusAndSize() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project dumboDrop =  z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        assertEquals(ProjectStatus.PLANNED, dumboDrop.getStatus());
+        assertEquals(ProjectSize.LARGE, dumboDrop.getSize());
+    }
 
 }

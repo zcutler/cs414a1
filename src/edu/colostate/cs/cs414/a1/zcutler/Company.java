@@ -48,6 +48,9 @@ public class Company {
 	}
 	
 	private Worker getWorker(Worker worker) {
+
+		if(worker == null)
+			throw new NullPointerException("Can not have a null worker.");
 		
 		if(!this.availableWorkers.contains(worker))
 			throw new RuntimeException(worker.getName() + " is not an available worker.");
@@ -130,7 +133,6 @@ public class Company {
 			this.assignedWorkers.remove(currentWorker);
 			this.unassignedWorkers.add(currentWorker);
 		}
-		
 	}
 	
 	public void unassignAll(Worker worker) {
@@ -142,13 +144,22 @@ public class Company {
 			return;
 		
 		Worker currentWorker = this.getWorker(worker);
+
+		HashSet<Project> workersProjects = new HashSet<>(currentWorker.getProjects());
 		
-		for(Project project : currentWorker.getProjects()) {
+		for(Project project : workersProjects) {
 			this.unassign(currentWorker, project);
 		}
 	}
 	
 	public Project createProject(String name, HashSet<Qualification> qualifications, ProjectSize projectSize, ProjectStatus projectStatus) {
+
+		if(qualifications == null)
+			throw new NullPointerException("Can not have null qualifications.");
+
+		if(projectSize == null)
+			throw new NullPointerException("Can not have a null project size.");
+
 		projectStatus = ProjectStatus.PLANNED;
 		Project project = new Project(name, projectSize, projectStatus);
 		project.addQualifications(qualifications);
@@ -162,10 +173,19 @@ public class Company {
 	}
 	
 	public void start(Project project) {
+		if(project == null)
+			throw new NullPointerException("Can not have a null project.");
+
+		if(!this.getProjects().contains(project))
+			throw new RuntimeException(project.getName() + " is not a know project.");
+
 		Project currentProject = this.getProject(project);
 		
 		if(currentProject.getStatus() == ProjectStatus.ACTIVE)
 			return;
+
+		if(currentProject.getStatus() == ProjectStatus.FINISHED)
+			throw new RuntimeException(project.getName() + " is a finished project.");
 		
 		HashSet<Qualification> missingQualifications = currentProject.missingQualifications();
 		if(missingQualifications.size() > 0)
@@ -174,9 +194,18 @@ public class Company {
 		currentProject.setStatus(ProjectStatus.ACTIVE);
 	}
 	
-	public void finish(Project project) {		
+	public void finish(Project project) {
+		if(project == null)
+			throw new NullPointerException("Can not have a null project.");
+
+		if(!this.getProjects().contains(project))
+			throw new RuntimeException(project.getName() + " is not a know project.");
+
 		Project currentProject = this.getProject(project);
-		
+
+		if(currentProject.getStatus() == ProjectStatus.PLANNED || currentProject.getStatus() == ProjectStatus.SUSPENDED)
+			throw new RuntimeException(project.getName() + " is not in an ACTIVE state. Only ACTIVE projects can be marked as finished.");
+
 		for(Worker worker : currentProject.getWorkers()) {
 			this.unassign(worker, currentProject);
 		}
