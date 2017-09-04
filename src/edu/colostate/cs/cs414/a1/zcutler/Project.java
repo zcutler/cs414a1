@@ -15,6 +15,10 @@ public class Project {
 			throw new NullPointerException("Can not have a null Project name.");
 		if(name.isEmpty())
 			throw new RuntimeException("Missing a Project name.");
+		if(projectSize == null)
+			throw new NullPointerException("Can not have a null project size.");
+		if(projectStatus == null)
+			throw new NullPointerException("Can not have a null project status.");
 		this.name = name;
 		this.projectSize = projectSize;
 		this.projectStatus = projectStatus;
@@ -71,6 +75,8 @@ public class Project {
 	}
 
 	public void setStatus(ProjectStatus projectStatus) {
+		if(projectStatus == null)
+			throw new NullPointerException("Can not have a null project status.");
 
 		if(projectStatus == ProjectStatus.ACTIVE){
 			if(this.missingQualifications().size() > 0)
@@ -81,6 +87,9 @@ public class Project {
 	}
 	
 	public void addWorker(Worker worker) {
+		if(worker == null)
+			throw new NullPointerException("Can not have a null worker.");
+
 		if(this.workers.contains(worker))
 			return;
 		
@@ -99,6 +108,10 @@ public class Project {
 	}
 	
 	public void removeWorker(Worker worker) {
+
+		if(worker == null)
+			throw new NullPointerException("Can not have a null worker.");
+
 		if(!workers.contains(worker)) 
 			return;
 		
@@ -115,6 +128,9 @@ public class Project {
 	}
 	
 	public void addQualification(Qualification qualification) {
+		if(qualification == null)
+			throw new NullPointerException("Can not have a null qualification.");
+
 		if(!this.qualifications.contains(qualification)) {
 			this.qualifications.add(qualification);
 			qualification.addProject(this);
@@ -158,6 +174,9 @@ public class Project {
 	}
 	
 	public boolean isHelpful(Worker worker) {
+		if(worker == null)
+			throw new NullPointerException("Can not have a null worker.");
+
 		boolean result = false;
 		
 		HashSet<Qualification> missingQualifications = this.missingQualifications();

@@ -15,11 +15,8 @@ public class QualificationTest {
 		HashSet<Qualification> qualifications = new HashSet<>();
 		qualifications.add(x);
 
-		@SuppressWarnings("unused")
 		Worker lyle = new Worker("chippah", qualifications);
-		@SuppressWarnings("unused")
 		Worker paul = new Worker("uncle paul", qualifications);
-		@SuppressWarnings("unused")
 		Worker Edger = new Worker("edger", qualifications);
 
 		return x;
@@ -43,19 +40,31 @@ public class QualificationTest {
 	@Test
 	public void testToString() {
 		Qualification x = new Qualification("x");
-		assertSame(x.toString(), "x");
+		assertSame("x", x.toString());
 	}
 
 	@Test
 	public void testToStringFail() {
 		Qualification x = new Qualification("x");
-		assertNotSame(x.toString(), "xyz");
+		assertNotSame("xyz", x.toString());
 	}
 
 	@Test
 	public void testAddToWorker() {
 		Worker lyle = Worker.getWorkerWithQualifications("chippah");
-		assertEquals(lyle.getQualifications().size(), 3);
+		assertEquals(3, lyle.getQualifications().size());
+	}
+
+	@Test
+	public void testAddToWorkerFailNullWorker() {
+		Qualification z = new Qualification("z");
+		try {
+			z.addWorker(null);
+			fail("Expected a NullPointerException to be thrown");
+		}catch (NullPointerException e){
+			String message = "Can not have a null worker.";
+			assertEquals(message, e.getMessage());
+		}
 	}
 
 	@Test
@@ -63,13 +72,20 @@ public class QualificationTest {
 		Worker lyle = Worker.getWorkerWithQualifications("chippah");
 		Qualification z = new Qualification("z");
 		lyle.addQualification(z);
-		assertEquals(lyle.getQualifications().size(), 3);
+		assertEquals(3, lyle.getQualifications().size());
 	}
 
 	@Test
 	public void testQualificationsWithMultipleWorkers() {
 		Qualification x = getQualificationWithMultipleWorkers();
-		assertEquals(x.getWorkers().size(), 3);
+		assertEquals(3, x.getWorkers().size());
+	}
+
+	@Test
+	public void testQualificationsContainsCorrectWorkers() {
+		Qualification x = getQualificationWithMultipleWorkers();
+		for(Worker worker : x.getWorkers())
+			assertTrue(x.getWorkers().contains(worker));
 	}
 
 	@Test
@@ -88,7 +104,7 @@ public class QualificationTest {
 		qualifications.add(x);
 		Worker lyle = new Worker("chippah", qualifications);
 		x.addWorker(lyle);
-		assertEquals(x.getWorkers().size(), 3);
+		assertEquals(3, x.getWorkers().size());
 	}
 
 	@Test
@@ -97,7 +113,7 @@ public class QualificationTest {
 			Qualification x = new Qualification(null);
 			fail("Expected a NullPointerException to be thrown");
 		}catch(Exception e){
-			assertEquals(e.getMessage(), "Can not have a null description.");
+			assertEquals("Can not have a null description.", e.getMessage());
 		}
 	}
 
@@ -107,7 +123,7 @@ public class QualificationTest {
 			Qualification x = new Qualification("");
 			fail("Expected a RuntimeException to be thrown");
 		}catch(Exception e){
-			assertEquals(e.getMessage(), "Missing a description.");
+			assertEquals("Missing a description.", e.getMessage());
 		}
 	}
 
@@ -128,7 +144,14 @@ public class QualificationTest {
 	@Test
 	public void testQualificationWithMultipleProjects() {
 		Qualification x = getQualificationWithMultipleProjects();
-		assertEquals(x.getProjects().size(), 2);
+		assertEquals(2, x.getProjects().size());
+	}
+
+	@Test
+	public void testQualificationContainsCorrectProjects() {
+		Qualification x = getQualificationWithMultipleProjects();
+		assertTrue(x.getProjects().contains(new Project("Dumbo Drop", ProjectSize.LARGE, ProjectStatus.ACTIVE)));
+		assertTrue(x.getProjects().contains(new Project("Runway", ProjectSize.SMALL, ProjectStatus.PLANNED)));
 	}
 
 	@Test
@@ -155,6 +178,17 @@ public class QualificationTest {
 		HashSet<Project> projects = x.getProjects();
 		for (Project project :	projects) {
 			assertTrue(project.getQualifications().contains(x));
+		}
+	}
+
+	@Test
+	public void testQualificationAddProjectsFailNull() {
+		Qualification x = getQualificationWithMultipleProjects();
+		try{
+			x.addProject(null);
+			fail("Expected a NullPointerException to be thrown");
+		}catch(Exception e){
+			assertEquals("Can not have a null project.", e.getMessage());
 		}
 	}
 }

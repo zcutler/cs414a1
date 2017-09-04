@@ -19,7 +19,7 @@ public class WorkerTest {
 		runway.addQualifications(qualifications);
 		lyle.addProjects(dumboDrop);
 		lyle.addProjects(runway);
-		assertEquals(lyle.toString(), "chippah:2:3:150000.0");
+		assertEquals("chippah:2:3:150000.0", lyle.toString());
 	}
 
 	@Test
@@ -28,7 +28,17 @@ public class WorkerTest {
 			Worker lyle = new Worker("chippah", null);
 			fail("Expected a NullPointerException to be thrown");
 		}catch(NullPointerException e){
-			assertEquals(e.getMessage(), "Can not have null qualifications.");
+			assertEquals("Can not have null qualifications.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void testEmptyWorker() {
+		try{
+			Worker lyle = new Worker("", null);
+			fail("Expected a RuntimeException to be thrown");
+		}catch(RuntimeException e){
+			assertEquals("Missing a Worker name.", e.getMessage());
 		}
 	}
 
@@ -41,7 +51,7 @@ public class WorkerTest {
 			Worker lyle = new Worker(null, qualifications);
 			fail("Expected a NullPointerException to be thrown");
 		}catch(NullPointerException e){
-			assertEquals(e.getMessage(), "Can not have a null Worker name.");
+			assertEquals("Can not have a null Worker name.", e.getMessage());
 		}
 	}
 
@@ -50,7 +60,18 @@ public class WorkerTest {
 		Worker lyle = Worker.getWorkerWithQualifications("chippah");
 		Qualification x = new Qualification("x");
 		lyle.addQualification(x);
-		assertEquals(lyle.getQualifications().size(), 3);
+		assertEquals(3, lyle.getQualifications().size());
+	}
+
+	@Test
+	public void testAddQualificationFailNull() {
+		Worker lyle = Worker.getWorkerWithQualifications("chippah");
+		try{
+			lyle.addQualification(null);
+			fail("Expected a NullPointerException to be thrown");
+		}catch(NullPointerException e){
+			assertEquals("Can not add a null qualification.", e.getMessage());
+		}
 	}
 
 	@Test
@@ -87,6 +108,39 @@ public class WorkerTest {
 	}
 
 	@Test
+	public void testAddProjectFailNull() {
+		Worker lyle = Worker.getWorkerWithQualifications("chippah");
+		try{
+			lyle.addProjects(null);
+			fail("Expected a NullPointerException to be thrown");
+		}catch(NullPointerException e){
+			assertEquals("Can not have a null project.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void testRemoveProjectFailNull() {
+		Worker lyle = Worker.getWorkerWithQualifications("chippah");
+		try{
+			lyle.removeProjects(null);
+			fail("Expected a NullPointerException to be thrown");
+		}catch(NullPointerException e){
+			assertEquals("Can not have a null project.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void testWillOverloadFailNull() {
+		Worker lyle = Worker.getWorkerWithQualifications("chippah");
+		try{
+			lyle.willOverload(null);
+			fail("Expected a NullPointerException to be thrown");
+		}catch(NullPointerException e){
+			assertEquals("Can not have a null project.", e.getMessage());
+		}
+	}
+
+	@Test
 	public void testAddProjectTwice() {
 		Worker lyle = Worker.getWorkerWithQualifications("chippah");
 		Project runway = new Project("runway", ProjectSize.SMALL, ProjectStatus.SUSPENDED);
@@ -94,7 +148,7 @@ public class WorkerTest {
 		runway.addQualifications(qualifications);
 		lyle.addProjects(runway);
 		lyle.addProjects(runway);
-		assertEquals(lyle.getProjects().size(), 1);
+		assertEquals(1, lyle.getProjects().size());
 	}
 
 	@Test
@@ -120,7 +174,6 @@ public class WorkerTest {
 	public void testWillOverload() {
 		Worker lyle = Worker.getWorkerWithQualificationsAndProjects("chippah");
 		HashSet<Qualification> qualifications = lyle.getQualifications();
-
 		Project dumboDrop = new Project("dumbo drop", ProjectSize.SMALL, ProjectStatus.SUSPENDED);
 		dumboDrop.addQualifications(qualifications);
 		assertTrue(lyle.willOverload(dumboDrop));
@@ -130,7 +183,6 @@ public class WorkerTest {
 	public void testAddProjectFailOverload() {
 		Worker lyle = Worker.getWorkerWithQualificationsAndProjects("chippah");
 		HashSet<Qualification> qualifications = lyle.getQualifications();
-
 		Project dumboDrop = new Project("dumbo drop", ProjectSize.SMALL, ProjectStatus.SUSPENDED);
 		dumboDrop.addQualifications(qualifications);
 
@@ -138,7 +190,7 @@ public class WorkerTest {
 			lyle.addProjects(dumboDrop);
 			fail("Expected a RuntimeException to be thrown");
 		}catch (RuntimeException e){
-			assertEquals(e.getMessage(), "dumbo drop will overload chippah.");
+			assertEquals("dumbo drop will overload chippah.", e.getMessage());
 		}
 	}
 

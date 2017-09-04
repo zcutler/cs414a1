@@ -47,6 +47,9 @@ public class Qualification {
 	}
 	
 	public void addWorker(Worker worker) {
+		if(worker == null)
+			throw new NullPointerException("Can not have a null worker.");
+
 		if(!this.workers.contains(worker)) {
 			this.workers.add(worker);
 			worker.addQualification(this);
@@ -55,6 +58,9 @@ public class Qualification {
 	}
 	
 	public void addProject(Project project) {
+		if(project == null)
+			throw new NullPointerException("Can not have a null project.");
+
 		if(!this.projects.contains(project)) {
 			this.projects.add(project);
 			project.addQualification(this);

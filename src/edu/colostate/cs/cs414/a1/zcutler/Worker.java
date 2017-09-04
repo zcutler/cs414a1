@@ -30,6 +30,9 @@ public class Worker {
 	}
 	
 	public void addQualification(Qualification qualification) {
+		if(qualification == null)
+			throw new NullPointerException("Can not add a null qualification.");
+
 		if(!this.qualifications.contains(qualification)) {
 			this.qualifications.add(qualification);
 			qualification.addWorker(this);
@@ -93,6 +96,10 @@ public class Worker {
 	}
 
 	public void addProjects(Project project) {
+
+		if(project == null)
+			throw new NullPointerException("Can not have a null project.");
+
 		if(this.projects.contains(project))
 			return;
 		
@@ -104,6 +111,9 @@ public class Worker {
 	}
 	
 	public void removeProjects(Project project) {
+		if(project == null)
+			throw new NullPointerException("Can not have a null project.");
+
 		if(this.projects.contains(project)) {
 			this.projects.remove(project);
 			project.removeWorker(this);
@@ -111,6 +121,9 @@ public class Worker {
 	}
 
 	public boolean willOverload(Project project) {
+		if(project == null)
+			throw new NullPointerException("Can not have a null project.");
+
 		boolean result = false;
 
 		int numberOfLargeProjects = 0, numberOfMediumProjects = 0, numberOfSmallProjects = 0;
