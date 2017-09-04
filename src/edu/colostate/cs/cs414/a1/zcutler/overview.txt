@@ -1,0 +1,29 @@
+﻿This assignment was fun way for me to get back into the mindset of coding in Java.
+For my job I mainly develop in c++ and c# so switching over wasn't too difficult.
+One thing that through me for a loop was I didn't know that Java didn't support default arguments inside of a method signature.
+Both c++ and c# support this functionality so it was surprising to me when Java did not.
+Also there is no auto declaration keyword. In c# you can use “var” and the right hand part of your declaration will
+determine the type at runtime. C++ has “auto” which does the same thing. Although I have worked with people who overuse
+that functionality and it makes their code hard to read sometimes.
+
+The only specifications that I didn't think were clear was how to handle error cases.
+If someone is going get overloaded from a new project or something of that nature,
+how were we suppose to handle that error. I decided to throw exceptions when the goal of the method was not achieved.
+If the goal of the method was already achieved, like running the start method on a project that was already active,
+I would just return without any error. I have always been taught that if goal is already achieved no need to inform
+the user just move on. I am a little worried that you expected us to handle the error cases differently so when you
+run your test suite against my code you will get some errors.
+
+Although Java runs in a runtime environment and should be portable across platforms I wanted to test my code on
+the school machines. I developed a majority of my code on a Windows machine and wanted to make sure that my version
+of Java and Junit was compatible with the versions on the State Capital Machines. I had a bit of trouble compiling
+and running my code on those boxes using CLI. I have only interacted with Java through an IDE so this was new.
+I posted a question on Canvas that nobody answered and googled a lot before I finally figured it out.
+My problem was I wasn't linking to the Hamcrest jar which is needed by Junit. Not sure how you plan on compiling and
+running my code but you can do it in the terminal by running these two commands:
+
+$ javac -cp /usr/share/java/junit.jar edu/colostate/cs/cs414/a1/zcutler/*.java
+
+$ java -cp .:/usr/share/java/junit.jar:/usr/share/java/hamcrest/core.jar org.junit.runner.JUnitCore edu.colostate.cs.cs414.a1.zcutler.TestAll
+
+
