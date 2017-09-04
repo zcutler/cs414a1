@@ -6,8 +6,8 @@ public class Worker {
 	
 	private String nickName;
 	private double salary;
-	private HashSet<Qualification> qualifications = new HashSet<Qualification>(); 
-	private HashSet<Project> projects = new HashSet<Project>(); 
+	private HashSet<Qualification> qualifications = new HashSet<>();
+	private HashSet<Project> projects = new HashSet<>();
 	private Company company;
 	private static final int workLoadThreshold = 12;
 	private static final int baseSalary = 50000;

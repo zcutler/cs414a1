@@ -222,6 +222,34 @@ public class CompanyTest {
     }
 
     @Test
+    public void testStartFailWorkerOverloaded() {
+        Company z = new Company("z");
+        Worker lyle = Worker.getWorkerWithQualifications("chippah");
+        z.addToAvailableWorkerPool(lyle);
+        Project dumboDrop = z.createProject("dumbo drop", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        Project runway = z.createProject("runway", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        Project runway2 = z.createProject("runway2", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        Project runway3 = z.createProject("runway3", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        Project runway4 = z.createProject("runway4", lyle.getQualifications(), ProjectSize.LARGE, ProjectStatus.PLANNED);
+        z.assign(lyle, dumboDrop);
+        z.assign(lyle, runway);
+        z.assign(lyle, runway2);
+        z.assign(lyle, runway3);
+        z.assign(lyle, runway4);
+        z.start(dumboDrop);
+        z.start(runway);
+        z.start(runway2);
+        z.start(runway3);
+        try {
+            z.start(runway4);
+            fail("Expected a RuntimeException to be thrown");
+        }catch (RuntimeException e){
+            String message = "chippah will be overloaded if runway4 is started.";
+            assertEquals(message, e.getMessage());
+        }
+    }
+
+    @Test
     public void testAssignWorkerNowAddedToProject() {
         Company z = new Company("z");
         Worker lyle = Worker.getWorkerWithQualifications("chippah");
@@ -674,5 +702,6 @@ public class CompanyTest {
         assertEquals(ProjectStatus.PLANNED, dumboDrop.getStatus());
         assertEquals(ProjectSize.LARGE, dumboDrop.getSize());
     }
+
 
 }

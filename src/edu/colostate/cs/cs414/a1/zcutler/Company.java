@@ -190,6 +190,14 @@ public class Company {
 		HashSet<Qualification> missingQualifications = currentProject.missingQualifications();
 		if(missingQualifications.size() > 0)
 			throw new RuntimeException(currentProject.getName() + " does not have all qualifications satisfied.");
+
+		HashSet<Worker> workers = currentProject.getWorkers();
+
+		for(Worker worker : workers){
+			if(worker.willOverload(currentProject)){
+				throw new RuntimeException(worker.getName() + " will be overloaded if " + currentProject.getName() + " is started.");
+			}
+		}
 		
 		currentProject.setStatus(ProjectStatus.ACTIVE);
 	}
