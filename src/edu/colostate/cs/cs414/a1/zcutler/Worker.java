@@ -13,15 +13,17 @@ public class Worker {
 	private static final int baseSalary = 50000;
 
 	public Worker(String name, HashSet<Qualification> qualifications){
-		if(name == null)
-			throw new NullPointerException("Can not have a null Worker name.");
-		if(name.isEmpty())
-			throw new RuntimeException("Missing a Worker name.");
-		if(qualifications == null)
-			throw new NullPointerException("Can not have null qualifications.");
+//		if(name == null)
+//			throw new NullPointerException("Can not have a null Worker name.");
+//		if(name.isEmpty())
+//			throw new RuntimeException("Missing a Worker name.");
+//		if(qualifications == null)
+//			throw new NullPointerException("Can not have null qualifications.");
 		this.nickName = name;
-		for(Qualification qualification : qualifications)
-			this.addQualification(qualification);
+		if(qualifications != null){
+			for(Qualification qualification : qualifications)
+				this.addQualification(qualification);
+		}
 		this.salary = 0.0d;
 	}
 	
@@ -31,7 +33,8 @@ public class Worker {
 	
 	public void addQualification(Qualification qualification) {
 		if(qualification == null)
-			throw new NullPointerException("Can not add a null qualification.");
+//			throw new NullPointerException("Can not add a null qualification.");
+			return;
 
 		if(!this.qualifications.contains(qualification)) {
 			this.qualifications.add(qualification);
@@ -98,13 +101,15 @@ public class Worker {
 	public void addProjects(Project project) {
 
 		if(project == null)
-			throw new NullPointerException("Can not have a null project.");
+			//throw new NullPointerException("Can not have a null project.");
+			return;
 
 		if(this.projects.contains(project))
 			return;
 		
 		if(this.willOverload(project))
-			throw new RuntimeException(project.getName() + " will overload " + this.nickName + ".");
+//			throw new RuntimeException(project.getName() + " will overload " + this.nickName + ".");
+			return;
 		
 		this.projects.add(project);
 		project.addWorker(this);
@@ -112,7 +117,8 @@ public class Worker {
 	
 	public void removeProjects(Project project) {
 		if(project == null)
-			throw new NullPointerException("Can not have a null project.");
+//			throw new NullPointerException("Can not have a null project.");
+			return;
 
 		if(this.projects.contains(project)) {
 			this.projects.remove(project);
@@ -122,15 +128,16 @@ public class Worker {
 
 	public boolean willOverload(Project project) {
 		if(project == null)
-			throw new NullPointerException("Can not have a null project.");
+//			throw new NullPointerException("Can not have a null project.");
+			return true;
 
 		boolean result = false;
 
 		int numberOfLargeProjects = 0, numberOfMediumProjects = 0, numberOfSmallProjects = 0;
 		
-		if(project.getSize() == null) {
-			throw new RuntimeException(project.getName() + " does not have a size.");
-		}
+		if(project.getSize() == null)
+//			throw new RuntimeException(project.getName() + " does not have a size.");
+			return true;
 
 		switch(project.getSize()) {
 			case LARGE:
@@ -147,9 +154,9 @@ public class Worker {
 		for(Project currentProject : this.projects) {
 			if(currentProject.getStatus() == ProjectStatus.ACTIVE) {
 				
-				if(currentProject.getSize() == null) {
-					throw new RuntimeException(currentProject.getName() + " does not have a size.");
-				}
+				if(currentProject.getSize() == null)
+//					throw new RuntimeException(currentProject.getName() + " does not have a size.");
+					return true;
 
 				switch(currentProject.getSize()) {
 					case LARGE:
@@ -171,7 +178,7 @@ public class Worker {
 		return result;
 	}
 	
-	static private int workLoadValue(int numberOfLargeProjects, int numberOfMediumProjects, int numberOfSmallProjects) {
+	static public int workLoadValue(int numberOfLargeProjects, int numberOfMediumProjects, int numberOfSmallProjects) {
 		return 3 * numberOfLargeProjects + 2 * numberOfMediumProjects + numberOfSmallProjects;
 	}
 

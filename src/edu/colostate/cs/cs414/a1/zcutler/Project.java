@@ -11,14 +11,14 @@ public class Project {
 	private HashSet<Qualification> qualifications = new HashSet<>();
 
 	public Project(String name, ProjectSize projectSize, ProjectStatus projectStatus) {
-		if(name == null)
-			throw new NullPointerException("Can not have a null Project name.");
-		if(name.isEmpty())
-			throw new RuntimeException("Missing a Project name.");
-		if(projectSize == null)
-			throw new NullPointerException("Can not have a null project size.");
-		if(projectStatus == null)
-			throw new NullPointerException("Can not have a null project status.");
+//		if(name == null)
+//			throw new NullPointerException("Can not have a null Project name.");
+//		if(name.isEmpty())
+//			throw new RuntimeException("Missing a Project name.");
+//		if(projectSize == null)
+//			throw new NullPointerException("Can not have a null project size.");
+//		if(projectStatus == null)
+//			throw new NullPointerException("Can not have a null project status.");
 		this.name = name;
 		this.projectSize = projectSize;
 		this.projectStatus = projectStatus;
@@ -76,11 +76,13 @@ public class Project {
 
 	public void setStatus(ProjectStatus projectStatus) {
 		if(projectStatus == null)
-			throw new NullPointerException("Can not have a null project status.");
+//			throw new NullPointerException("Can not have a null project status.");
+			return;
 
 		if(projectStatus == ProjectStatus.ACTIVE){
 			if(this.missingQualifications().size() > 0)
-				throw new RuntimeException(this.name + " still has missing qualifications.");
+//				throw new RuntimeException(this.name + " still has missing qualifications.");
+				return;
 		}
 
 		this.projectStatus = projectStatus;
@@ -88,19 +90,23 @@ public class Project {
 	
 	public void addWorker(Worker worker) {
 		if(worker == null)
-			throw new NullPointerException("Can not have a null worker.");
+//			throw new NullPointerException("Can not have a null worker.");
+			return;
 
 		if(this.workers.contains(worker))
 			return;
 		
 		if(!this.acceptingWorkers())
-			throw new RuntimeException(this.name + " is not accepting workers. Project Status: " + this.projectStatus.name());
-		
+//			throw new RuntimeException(this.name + " is not accepting workers. Project Status: " + this.projectStatus.name());
+			return;
+
 		if(!this.isHelpful(worker))
-			throw new RuntimeException(worker.getName() + " will not be helpful on project " + this.name + ".");
+//			throw new RuntimeException(worker.getName() + " will not be helpful on project " + this.name + ".");
+			return;
 
 		if(worker.willOverload(this))
-			throw new RuntimeException(worker.getName() + " will be overloaded if assigned to project " + this.name + ".");
+//			throw new RuntimeException(worker.getName() + " will be overloaded if assigned to project " + this.name + ".");
+			return;
 
 		this.workers.add(worker);
 		
@@ -110,7 +116,8 @@ public class Project {
 	public void removeWorker(Worker worker) {
 
 		if(worker == null)
-			throw new NullPointerException("Can not have a null worker.");
+//			throw new NullPointerException("Can not have a null worker.");
+			return;
 
 		if(!workers.contains(worker)) 
 			return;
@@ -129,7 +136,8 @@ public class Project {
 	
 	public void addQualification(Qualification qualification) {
 		if(qualification == null)
-			throw new NullPointerException("Can not have a null qualification.");
+//			throw new NullPointerException("Can not have a null qualification.");
+			return;
 
 		if(!this.qualifications.contains(qualification)) {
 			this.qualifications.add(qualification);
@@ -175,7 +183,8 @@ public class Project {
 	
 	public boolean isHelpful(Worker worker) {
 		if(worker == null)
-			throw new NullPointerException("Can not have a null worker.");
+//			throw new NullPointerException("Can not have a null worker.");
+			return false;
 
 		boolean result = false;
 		

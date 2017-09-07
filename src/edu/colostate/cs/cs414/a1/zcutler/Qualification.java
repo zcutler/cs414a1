@@ -3,17 +3,21 @@ package edu.colostate.cs.cs414.a1.zcutler;
 import java.util.HashSet;
 
 public class Qualification {
-	
+
 	private String description;
 	private HashSet<Worker> workers = new HashSet<>();
 	private HashSet<Project> projects = new HashSet<>();
 	
 	public Qualification(String description) {
-		if(description == null)
-			throw new NullPointerException("Can not have a null description.");
-		if(description.isEmpty())
-			throw new RuntimeException("Missing a description.");
+//		if(description == null)
+//			throw new NullPointerException("Can not have a null description.");
+//		if(description.isEmpty())
+//			throw new RuntimeException("Missing a description.");
 		this.description = description;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	@Override
@@ -48,7 +52,8 @@ public class Qualification {
 	
 	public void addWorker(Worker worker) {
 		if(worker == null)
-			throw new NullPointerException("Can not have a null worker.");
+//			throw new NullPointerException("Can not have a null worker.");
+			return;
 
 		if(!this.workers.contains(worker)) {
 			this.workers.add(worker);
@@ -59,7 +64,8 @@ public class Qualification {
 	
 	public void addProject(Project project) {
 		if(project == null)
-			throw new NullPointerException("Can not have a null project.");
+//			throw new NullPointerException("Can not have a null project.");
+			return;
 
 		if(!this.projects.contains(project)) {
 			this.projects.add(project);

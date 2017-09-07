@@ -12,7 +12,8 @@ public class ProjectTest {
     public void testNullName() {
         try{
             Project dumboDrop = new Project(null, ProjectSize.LARGE, ProjectStatus.FINISHED);
-            fail("Expected a NullPointerException to be thrown");
+            assertNull(dumboDrop.getName());
+            //fail("Expected a NullPointerException to be thrown");
         }catch (NullPointerException e){
             assertEquals("Can not have a null Project name.", e.getMessage());
         }
@@ -22,7 +23,8 @@ public class ProjectTest {
     public void testNullStatus() {
         try{
             Project dumboDrop = new Project("dumbo drop", ProjectSize.LARGE, null);
-            fail("Expected a NullPointerException to be thrown");
+            assertNull(dumboDrop.getStatus());
+            //fail("Expected a NullPointerException to be thrown");
         }catch (NullPointerException e){
             assertEquals("Can not have a null project status.", e.getMessage());
         }
@@ -32,7 +34,8 @@ public class ProjectTest {
     public void testNullSize() {
         try{
             Project dumboDrop = new Project("dumbo drop", null, ProjectStatus.FINISHED);
-            fail("Expected a NullPointerException to be thrown");
+            assertNull(dumboDrop.getSize());
+            //fail("Expected a NullPointerException to be thrown");
         }catch (NullPointerException e){
             assertEquals("Can not have a null project size.", e.getMessage());
         }
@@ -42,7 +45,8 @@ public class ProjectTest {
     public void testEmptyName() {
         try{
             Project dumboDrop = new Project("", ProjectSize.LARGE, ProjectStatus.FINISHED);
-            fail("Expected a RuntimeException to be thrown");
+            assertEquals("", dumboDrop.getName());
+//            fail("Expected a RuntimeException to be thrown");
         }catch (RuntimeException e){
             assertEquals("Missing a Project name.", e.getMessage());
         }
@@ -79,13 +83,13 @@ public class ProjectTest {
     public void testAddWorkerFailStatusFinished() {
         Worker lyle = Worker.getWorkerWithQualifications("chippah");
         Worker chip = Worker.getWorkerWithQualifications("chip");
-
         Project dumboDrop = Project.getProjectWithWorker("Dumbo Drop", lyle);
         dumboDrop.setStatus(ProjectStatus.FINISHED);
 
         try{
             dumboDrop.addWorker(chip);
-            fail("Expected a RuntimeException to be thrown");
+            assertFalse(dumboDrop.getWorkers().contains(chip));
+//            fail("Expected a RuntimeException to be thrown");
         } catch (RuntimeException e){
             String message = "Dumbo Drop is not accepting workers. Project Status: FINISHED";
             assertEquals(message, e.getMessage());
@@ -102,7 +106,8 @@ public class ProjectTest {
 
         try{
             dumboDrop.addWorker(lyle);
-            fail("Expected a RuntimeException to be thrown");
+            assertFalse(dumboDrop.getWorkers().contains(lyle));
+//            fail("Expected a RuntimeException to be thrown");
         } catch (RuntimeException e){
             String message = "chippah will not be helpful on project Dumbo Drop.";
             assertEquals(message, e.getMessage());
@@ -128,8 +133,10 @@ public class ProjectTest {
         Worker lyle = Worker.getWorkerWithQualifications("chippah");
         Project dumboDrop = Project.getProjectWithWorker("Dumbo Drop", lyle);
         try{
-            dumboDrop.addWorker(null);
-            fail("Expected a NullPointerException to be thrown");
+            Worker nullWorker = null;
+            dumboDrop.addWorker(nullWorker);
+            assertFalse(dumboDrop.getWorkers().contains(nullWorker));
+            //fail("Expected a NullPointerException to be thrown");
         }catch (NullPointerException e){
             assertEquals("Can not have a null worker.", e.getMessage());
         }
@@ -140,8 +147,10 @@ public class ProjectTest {
         Worker lyle = Worker.getWorkerWithQualifications("chippah");
         Project dumboDrop = Project.getProjectWithWorker("Dumbo Drop", lyle);
         try{
-            dumboDrop.removeWorker(null);
-            fail("Expected a NullPointerException to be thrown");
+            Worker nullWorker = null;
+            dumboDrop.removeWorker(nullWorker);
+            assertFalse(dumboDrop.getWorkers().contains(nullWorker));
+            //fail("Expected a NullPointerException to be thrown");
         }catch (NullPointerException e){
             assertEquals("Can not have a null worker.", e.getMessage());
         }
@@ -197,7 +206,8 @@ public class ProjectTest {
 
         try{
             dumboDrop.setStatus(ProjectStatus.ACTIVE);
-            fail("Expected a RuntimeException to be thrown");
+            assertNotEquals(ProjectStatus.ACTIVE, dumboDrop.getStatus());
+//            fail("Expected a RuntimeException to be thrown");
         }catch (RuntimeException e){
             assertEquals("Dumbo Drop still has missing qualifications.", e.getMessage());
         }
@@ -208,8 +218,10 @@ public class ProjectTest {
         Worker lyle = Worker.getWorkerWithQualifications("chippah");
         Project dumboDrop = Project.getProjectWithWorker("Dumbo Drop", lyle);
         try{
-            dumboDrop.setStatus(null);
-            fail("Expected a NullPointerException to be thrown");
+            ProjectStatus nullStatus = null;
+            dumboDrop.setStatus(nullStatus);
+            assertNotEquals(nullStatus, dumboDrop.getStatus());
+//            fail("Expected a NullPointerException to be thrown");
         }catch (NullPointerException e){
             assertEquals("Can not have a null project status.", e.getMessage());
         }
@@ -220,8 +232,10 @@ public class ProjectTest {
         Worker lyle = Worker.getWorkerWithQualifications("chippah");
         Project dumboDrop = Project.getProjectWithWorker("Dumbo Drop", lyle);
         try{
-            dumboDrop.addQualification(null);
-            fail("Expected a NullPointerException to be thrown");
+            Qualification nullQualification = null;
+            dumboDrop.addQualification(nullQualification);
+            assertFalse(dumboDrop.getQualifications().contains(dumboDrop));
+//            fail("Expected a NullPointerException to be thrown");
         }catch (NullPointerException e){
             assertEquals("Can not have a null qualification.", e.getMessage());
         }
@@ -260,8 +274,10 @@ public class ProjectTest {
         Worker lyle = Worker.getWorkerWithQualifications("chippah");
         Project dumboDrop = Project.getProjectWithWorker("Dumbo Drop", lyle);
         try{
-            dumboDrop.isHelpful(null);
-            fail("Expected a NullPointerException to be thrown");
+            Worker nullWorker = null;
+            boolean shouldBeFalse = dumboDrop.isHelpful(nullWorker);
+            assertFalse(shouldBeFalse);
+//            fail("Expected a NullPointerException to be thrown");
         }catch (NullPointerException e){
             assertEquals("Can not have a null worker.", e.getMessage());
         }
